@@ -1,3 +1,6 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!DOCTYPE html>
 <html lang="kr">
 <head>
@@ -58,7 +61,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <li class="active"><a href="../index.html">Posts</a></li>
                 <li><a href="../user/login.html" role="button">로그인</a></li>
-                <li><a href="../user/form.html" role="button">회원가입</a></li>
+                <li><a href="user/create" role="button">회원가입</a></li>
                 <li><a href="#" role="button">로그아웃</a></li>
                 <li><a href="#" role="button">개인정보수정</a></li>
             </ul>
@@ -69,7 +72,7 @@
 <div class="container" id="main">
    <div class="col-md-6 col-md-offset-3">
       <div class="panel panel-default content-main">
-          <form name="question" method="post" action="/user/create">
+          <form id="question" name="question" method="post" action="/user/create">
               <div class="form-group">
                   <label for="userId">사용자 아이디</label>
                   <input class="form-control" id="userId" name="userId" placeholder="User ID">
