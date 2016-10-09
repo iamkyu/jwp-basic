@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
@@ -24,15 +25,19 @@ public class UpdateUserServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String userId = String.valueOf(req.getParameter("userId"));
-        User anUser = DataBase.findUserById(userId);
-
-        if (anUser != null) {
-            log.debug("user : {}", anUser);
-            req.setAttribute("user", anUser);
+        HttpSession session = req.getSession();
+        Object value = session.getAttribute("user");
+        String url;
+        if (value != null) {
+            User user = (User) value;
+            log.debug("user : {}", user);
+            req.setAttribute("user", user);
+            url = "/user/updateForm.jsp";
+        } else {
+            url = "/user/login";
         }
 
-        RequestDispatcher rd = req.getRequestDispatcher("/user/updateForm.jsp");
+        RequestDispatcher rd = req.getRequestDispatcher(url);
         rd.forward(req, resp);
     }
 
