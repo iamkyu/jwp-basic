@@ -1,4 +1,4 @@
-package next.web;
+package next.controller;
 
 import core.db.DataBase;
 import next.model.User;
@@ -13,10 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/user/create")
-public class CreateUserServlet extends HttpServlet {
+@WebServlet(value = { "/users/create", "/users/form" })
+public class CreateUserController extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private static final Logger log = LoggerFactory.getLogger(CreateUserServlet.class);
+    private static final Logger log = LoggerFactory.getLogger(CreateUserController.class);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -28,8 +28,10 @@ public class CreateUserServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         User user = new User(req.getParameter("userId"), req.getParameter("password"), req.getParameter("name"),
                 req.getParameter("email"));
-        log.debug("user : {}", user);
+        log.debug("User : {}", user);
+
         DataBase.addUser(user);
-        resp.sendRedirect("/user/list");
+
+        resp.sendRedirect("/");
     }
 }
