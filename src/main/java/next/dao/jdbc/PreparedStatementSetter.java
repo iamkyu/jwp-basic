@@ -1,4 +1,4 @@
-package next.dao;
+package next.dao.jdbc;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
