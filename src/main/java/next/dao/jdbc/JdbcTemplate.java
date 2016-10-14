@@ -96,14 +96,11 @@ public class JdbcTemplate {
     }
 
     PreparedStatementSetter createPreparedStatementSetter(final Object[] parameters) {
-        return new PreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement pstmt) throws SQLException {
-                int parameterIndex = 1;
-                for (Object object : parameters) {
-                    pstmt.setObject(parameterIndex, object);
-                    parameterIndex++;
-                }
+        return pstmt -> {
+            int parameterIndex = 1;
+            for (Object object : parameters) {
+                pstmt.setObject(parameterIndex, object);
+                parameterIndex++;
             }
         };
     }
