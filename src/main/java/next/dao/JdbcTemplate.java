@@ -1,7 +1,6 @@
 package next.dao;
 
 import core.jdbc.ConnectionManager;
-import next.model.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -31,21 +30,40 @@ public class JdbcTemplate {
         }
     }
 
-    public <T> T queryForObject(String sql, PreparedStatementSetter pss, RowMapper<T> rm) throws SQLException {
+    public void update(String sql, Object... parameters) throws SQLException {
+        update(sql, createPreparedStatementSetter(parameters)) ;
+    }
+
+    public <T> T queryForObject(String sql, RowMapper<T> rm, PreparedStatementSetter pss) throws SQLException {
+        List<T> list = query(sql, rm, pss);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
+    }
+
+    public <T> T queryForObject(String sql, RowMapper<T> rm, Object... parameters) throws SQLException {
+        return queryForObject(sql, rm, createPreparedStatementSetter(parameters));
+    }
+
+    public <T> List<T> query(String sql, RowMapper<T > rm, PreparedStatementSetter pss) throws SQLException {
         Connection con = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
+
         try {
             con = ConnectionManager.getConnection();
             pstmt = con.prepareStatement(sql);
             pss.setValues(pstmt);
 
             rs = pstmt.executeQuery();
-            if (!rs.next()) {
-                return null;
-            }
 
-            return rm.mapRow(rs);
+            List<T> list = new ArrayList<>();
+            while (rs.next()) {
+                list.add(rm.mapRow(rs));
+            }
+            return list;
+
         } finally {
             if (rs != null) {
                 rs.close();
@@ -58,32 +76,22 @@ public class JdbcTemplate {
             }
         }
     }
-    public List<User> query(String sql, PreparedStatementSetter pss, RowMapper rm) throws SQLException {
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-        List<User> users = new ArrayList<>();
-        try {
-            con = ConnectionManager.getConnection();
-            pstmt = con.prepareStatement(sql);
-            pss.setValues(pstmt);
 
-            rs = pstmt.executeQuery();
-            if (rs.next()) {
-                users.add((User) rm.mapRow(rs));
-            }
+    public <T> List<T> query(String sql, RowMapper<T> rm, Object... parameters) throws SQLException {
+        return query(sql, rm, createPreparedStatementSetter(parameters));
 
-        } finally {
-            if (rs != null) {
-                rs.close();
+    }
+
+    PreparedStatementSetter createPreparedStatementSetter(final Object[] parameters) {
+        return new PreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement pstmt) throws SQLException {
+                int parameterIndex = 1;
+                for (Object object : parameters) {
+                    pstmt.setObject(parameterIndex, object);
+                    parameterIndex++;
+                }
             }
-            if (pstmt != null) {
-                pstmt.close();
-            }
-            if (con != null) {
-                con.close();
-            }
-        }
-        return users;
+        };
     }
 }
