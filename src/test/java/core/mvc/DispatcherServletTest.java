@@ -5,6 +5,7 @@ import next.controller.UserSessionUtils;
 import next.model.User;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -124,4 +125,62 @@ public class DispatcherServletTest {
         assertThat(sessionUserInfo.getUserId(), is(anUser.getUserId()));
         assertThat(sessionUserInfo.getPassword(), is(anUser.getPassword()));
     }
+
+    @Test(expected = ServletException.class)
+    public void 프로필_조회_없는_아이디로_시도시_예외_발생() throws ServletException, IOException {
+        //given
+        request.setRequestURI("/users/profile");
+        request.setMethod("GET");
+        request.setParameter("userId", "willNotFound");
+
+        //when
+        dispatcherServlet.service(request, response);
+
+        //then
+    }
+
+    @Test
+    public void 유저_프로필_조회() throws ServletException, IOException {
+        //given
+        request.setRequestURI("/users/profile");
+        request.setMethod("GET");
+        User anUser = new User("hello", "world", null, null);
+        DataBase.addUser(anUser);
+        request.setParameter("userId", anUser.getUserId());
+
+        //when
+        dispatcherServlet.service(request, response);
+
+        //then
+        User findUser = (User) request.getAttribute("user");
+        assertThat(findUser.getUserId(), is(anUser.getUserId()));
+    }
+
+    @Ignore @Test
+    public void 로그아웃_요청시_세션_파괴() throws ServletException, IOException {
+        //given
+        request.setRequestURI("/users/login");
+        request.setMethod("POST");
+        User anUser = new User("hello", "world", "name", null);
+        DataBase.addUser(anUser);
+        request.setParameter("userId", "hello");
+        request.setParameter("password", "world");
+
+        //when
+        request.setSession(session);
+        dispatcherServlet.service(request, response);
+
+
+        //and given
+        request.setRequestURI("/users/logout");
+        request.setRequestURI("POST");
+
+        //when
+        dispatcherServlet.service(request, response);
+
+        //then
+//        assertNull(session.getAttribute(UserSessionUtils.USER_SESSION_KEY));
+    }
+
+
 }

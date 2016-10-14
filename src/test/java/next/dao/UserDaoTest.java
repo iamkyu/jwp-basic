@@ -3,7 +3,6 @@ package next.dao;
 import core.jdbc.ConnectionManager;
 import next.model.User;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
@@ -21,7 +20,7 @@ public class UserDaoTest {
         DatabasePopulatorUtils.execute(populator, ConnectionManager.getDataSource());
     }
 
-    @Ignore @Test
+    @Test
     public void crud() throws Exception {
         User expected = new User("userId", "password", "name", "javajigi@email.com");
         UserDao userDao = new UserDao();
@@ -35,7 +34,7 @@ public class UserDaoTest {
         assertEquals(expected, actual);
     }
 
-    @Ignore @Test
+    @Test
     public void findAll() throws Exception {
         UserDao userDao = new UserDao();
         List<User> users = userDao.findAll();
