@@ -1,15 +1,15 @@
 package next.controller;
 
 import core.mvc.Controller;
-import next.dao.UserDao;
+import next.dao.QuestionDao;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class HomeController implements Controller {
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-        UserDao userDao = new UserDao();
-        req.setAttribute("users", userDao.findAll());
+        QuestionDao questionDao = new QuestionDao();
+        req.setAttribute("questions", questionDao.findAll());
         return "home.jsp";
     }
 }

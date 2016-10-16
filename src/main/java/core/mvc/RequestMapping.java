@@ -1,11 +1,13 @@
 package core.mvc;
 
+import next.controller.CreateQuestionController;
 import next.controller.CreateUserController;
 import next.controller.HomeController;
 import next.controller.ListUserController;
 import next.controller.LoginController;
 import next.controller.LogoutController;
 import next.controller.ProfileController;
+import next.controller.QnaFormController;
 import next.controller.UpdateFormUserController;
 import next.controller.UpdateUserController;
 import org.slf4j.Logger;
@@ -34,6 +36,8 @@ public class RequestMapping {
         mappings.put("/users/create", new CreateUserController());
         mappings.put("/users/updateForm", new UpdateFormUserController());
         mappings.put("/users/update", new UpdateUserController());
+        mappings.put("/qna/form", new QnaFormController());
+        mappings.put("/qna/create", new CreateQuestionController());
 
         logger.info("Initialized Request Mapping!");
     }
