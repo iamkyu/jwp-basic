@@ -31,7 +31,11 @@ public class QuestionDao {
         return jdbcTemplate.query(sql, rm);
     }
 
-    public Question findByQuestionId(String questionId) {
-        return null;
+    public Question findByQuestionId(Long questionId) {
+        RowMapper<Question> rm = rs -> new Question(rs.getLong("questionId"), rs.getString("writer"), rs.getString("title"),
+                rs.getString("contents"), rs.getDate("createdDate"), rs.getInt("countOfAnswer"));
+        JdbcTemplate jdbcTemplate = new JdbcTemplate();
+        String sql = "SELECT questionId, writer, title, contents, createdDate, countOfAnswer FROM QUESTIONS WHERE questionId=?";
+        return jdbcTemplate.queryForObject(sql, rm, questionId);
     }
 }

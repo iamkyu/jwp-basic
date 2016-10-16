@@ -88,24 +88,40 @@ public class QnaControllerTest {
 
         //when
 
-        //then
-    }
-
-    @Test
-    public void 질문을_전체_조회한다() {
-        //given
-
-        //when
 
         //then
     }
 
     @Test
-    public void 질문_하나를_상세_조회한다() {
+    public void 질문을_전체_조회한다() throws ServletException, IOException {
         //given
+        request.setRequestURI("/");
+        request.setMethod("GET");
 
         //when
+        response = new MockHttpServletResponse();
+        dispatcherServlet.service(request, response);
 
         //then
+        assertThat(response.getStatus(), is(200));
+        assertThat(response.getForwardedUrl(), is("home.jsp"));
+        assertNotNull(request.getAttribute("questions"));
+    }
+
+    @Test
+    public void 질문_하나를_상세_조회한다() throws ServletException, IOException {
+        //given
+        request.setRequestURI("/qna/show");
+        request.setMethod("GET");
+        request.setParameter("questionId", String.valueOf(1L));
+
+        //when
+        response = new MockHttpServletResponse();
+        dispatcherServlet.service(request, response);
+
+        //then
+        assertThat(response.getStatus(), is(200));
+        assertThat(response.getForwardedUrl(), is("/qna/show.jsp"));
+        assertNotNull(request.getAttribute("question"));
     }
 }

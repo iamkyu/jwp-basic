@@ -2,6 +2,7 @@ package core.mvc;
 
 import next.controller.CreateQuestionController;
 import next.controller.CreateUserController;
+import next.controller.ShowQnaController;
 import next.controller.HomeController;
 import next.controller.ListUserController;
 import next.controller.LoginController;
@@ -38,6 +39,7 @@ public class RequestMapping {
         mappings.put("/users/update", new UpdateUserController());
         mappings.put("/qna/form", new QnaFormController());
         mappings.put("/qna/create", new CreateQuestionController());
+        mappings.put("/qna/show", new ShowQnaController());
 
         logger.info("Initialized Request Mapping!");
     }
