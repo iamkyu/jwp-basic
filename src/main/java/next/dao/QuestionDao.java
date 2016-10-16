@@ -20,7 +20,9 @@ public class QuestionDao {
     }
 
     public void update(Question question) {
-
+        JdbcTemplate jdbcTemplate = new JdbcTemplate();
+        String sql = "UPDATE QUESTIONS set title=?, contents=?, createdDate=? where questionId = ?";
+        jdbcTemplate.update(sql, question.getTitle(), question.getContents(), question.getCreatedDate(), question.getQuestionId());
     }
 
     public List<Question> findAll() {
@@ -38,4 +40,6 @@ public class QuestionDao {
         String sql = "SELECT questionId, writer, title, contents, createdDate, countOfAnswer FROM QUESTIONS WHERE questionId=?";
         return jdbcTemplate.queryForObject(sql, rm, questionId);
     }
+
+
 }

@@ -2,14 +2,16 @@ package core.mvc;
 
 import next.controller.CreateQuestionController;
 import next.controller.CreateUserController;
-import next.controller.ShowQnaController;
 import next.controller.HomeController;
 import next.controller.ListUserController;
 import next.controller.LoginController;
 import next.controller.LogoutController;
 import next.controller.ProfileController;
 import next.controller.QnaFormController;
+import next.controller.ShowQnaController;
+import next.controller.UpdateFormQuestionController;
 import next.controller.UpdateFormUserController;
+import next.controller.UpdateQuestionController;
 import next.controller.UpdateUserController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +42,8 @@ public class RequestMapping {
         mappings.put("/qna/form", new QnaFormController());
         mappings.put("/qna/create", new CreateQuestionController());
         mappings.put("/qna/show", new ShowQnaController());
+        mappings.put("/qna/updateForm", new UpdateFormQuestionController());
+        mappings.put("/qna/update", new UpdateQuestionController());
 
         logger.info("Initialized Request Mapping!");
     }
