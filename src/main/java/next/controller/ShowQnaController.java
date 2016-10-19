@@ -1,6 +1,7 @@
 package next.controller;
 
 import core.mvc.Controller;
+import next.dao.AnswerDao;
 import next.dao.QuestionDao;
 import next.model.Question;
 
@@ -16,11 +17,13 @@ public class ShowQnaController implements Controller {
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         Long questionId = Long.valueOf(req.getParameter("questionId"));
         QuestionDao questionDao = new QuestionDao();
+        AnswerDao answerDao = new AnswerDao();
         Question question = questionDao.findByQuestionId(questionId);
         if (question == null) {
             throw new NullPointerException("질문을 찾을 수 없습니다.");
         }
         req.setAttribute("question", question);
+        req.setAttribute("answers", answerDao.findAllByQuestionId(questionId));
         return "/qna/show.jsp";
     }
 }

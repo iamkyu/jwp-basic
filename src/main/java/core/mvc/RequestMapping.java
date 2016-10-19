@@ -1,7 +1,9 @@
 package core.mvc;
 
+import next.controller.AddAnswerController;
 import next.controller.CreateQuestionController;
 import next.controller.CreateUserController;
+import next.controller.DeleteAnswerController;
 import next.controller.HomeController;
 import next.controller.ListUserController;
 import next.controller.LoginController;
@@ -44,6 +46,8 @@ public class RequestMapping {
         mappings.put("/qna/show", new ShowQnaController());
         mappings.put("/qna/updateForm", new UpdateFormQuestionController());
         mappings.put("/qna/update", new UpdateQuestionController());
+        mappings.put("/api/qna/addAnswer", new AddAnswerController());
+        mappings.put("/api/qna/deleteAnswer", new DeleteAnswerController());
 
         logger.info("Initialized Request Mapping!");
     }
