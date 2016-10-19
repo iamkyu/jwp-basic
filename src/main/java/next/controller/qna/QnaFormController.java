@@ -1,6 +1,7 @@
-package next.controller;
+package next.controller.qna;
 
 import core.mvc.Controller;
+import next.controller.UserSessionUtils;
 import next.model.User;
 
 import javax.servlet.http.HttpServletRequest;

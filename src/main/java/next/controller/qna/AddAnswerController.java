@@ -1,4 +1,4 @@
-package next.controller;
+package next.controller.qna;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import core.mvc.Controller;
