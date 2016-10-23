@@ -8,5 +8,5 @@ import javax.servlet.http.HttpServletResponse;
  * @since 2016-10-12
  */
 public interface Controller {
-    String execute(HttpServletRequest req, HttpServletResponse resp)throws Exception;
+    ModelAndView execute(HttpServletRequest req, HttpServletResponse resp)throws Exception;
 }

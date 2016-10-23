@@ -1,6 +1,7 @@
 package next.controller.user;
 
-import core.mvc.Controller;
+import core.mvc.AbstractController;
+import core.mvc.ModelAndView;
 import next.dao.QuestionDao;
 import next.model.Question;
 import org.slf4j.Logger;
@@ -14,11 +15,11 @@ import java.util.Date;
  * @author Kj Nam
  * @since 2016-10-16
  */
-public class UpdateQuestionController implements Controller {
+public class UpdateQuestionController extends AbstractController {
     private static final Logger log = LoggerFactory.getLogger(UpdateQuestionController.class);
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+    public ModelAndView execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         QuestionDao questionDao = new QuestionDao();
         Question question = questionDao.findByQuestionId(Long.valueOf(req.getParameter("questionId")));
 
@@ -34,6 +35,6 @@ public class UpdateQuestionController implements Controller {
         questionDao.update(updateQuestion);
 
 
-        return "redirect:/qna/show?questionId=" + req.getParameter("questionId");
+        return jspView("redirect:/qna/show?questionId=" + req.getParameter("questionId"));
     }
 }

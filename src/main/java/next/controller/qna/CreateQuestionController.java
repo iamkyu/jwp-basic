@@ -1,6 +1,7 @@
 package next.controller.qna;
 
-import core.mvc.Controller;
+import core.mvc.AbstractController;
+import core.mvc.ModelAndView;
 import next.dao.QuestionDao;
 import next.model.Question;
 import org.slf4j.Logger;
@@ -14,11 +15,11 @@ import java.util.Date;
  * @author Kj Nam
  * @since 2016-10-16
  */
-public class CreateQuestionController implements Controller {
+public class CreateQuestionController extends AbstractController {
     private static final Logger log = LoggerFactory.getLogger(CreateQuestionController.class);
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+    public ModelAndView execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         Question question = new Question(
                 req.getParameter("writer"),
                 req.getParameter("title"),
@@ -29,6 +30,6 @@ public class CreateQuestionController implements Controller {
         QuestionDao questionDao = new QuestionDao();
         questionDao.insert(question);
 
-        return "redirect:/";
+        return jspView("redirect:/");
     }
 }

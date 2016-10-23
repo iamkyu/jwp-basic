@@ -1,8 +1,8 @@
 package next.controller.qna;
 
-import core.mvc.Controller;
+import core.mvc.AbstractController;
+import core.mvc.ModelAndView;
 import next.controller.UserSessionUtils;
-import next.model.User;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,18 +12,15 @@ import javax.servlet.http.HttpSession;
  * @author Kj Nam
  * @since 2016-10-15
  */
-public class QnaFormController implements Controller {
+public class QnaFormController extends AbstractController {
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+    public ModelAndView execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         if (!UserSessionUtils.isLogined(req.getSession())) {
-            return "redirect:/users/loginForm";
+            return jspView("redirect:/");
         }
 
         HttpSession session = req.getSession();
-        User user = UserSessionUtils.getUserFromSession(session);
-        req.setAttribute("user", user);
 
-
-        return "/qna/form.jsp";
+        return jspView("/qna/form.jsp").addObject("user", UserSessionUtils.getUserFromSession(session));
     }
 }
