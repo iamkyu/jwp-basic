@@ -1,4 +1,4 @@
-package next.web;
+package next.controller;
 
 import core.db.DataBase;
 
@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/user/list")
-public class ListUserServlet extends HttpServlet {
+public class ListUserController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     @Override

@@ -1,4 +1,4 @@
-package next.web;
+package next.controller;
 
 import core.db.DataBase;
 import next.model.User;
@@ -18,9 +18,9 @@ import java.io.IOException;
  * @since 2016-11-13
  */
 @WebServlet("/user/update")
-public class UpdateUserServlet extends HttpServlet {
+public class UpdateUserController extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private static final Logger log = LoggerFactory.getLogger(UpdateUserServlet.class);
+    private static final Logger log = LoggerFactory.getLogger(UpdateUserController.class);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

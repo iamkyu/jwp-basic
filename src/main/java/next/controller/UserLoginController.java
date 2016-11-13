@@ -1,4 +1,4 @@
-package next.web;
+package next.controller;
 
 import core.db.DataBase;
 import next.model.User;
@@ -18,15 +18,14 @@ import java.io.IOException;
  * @author Kj Nam
  * @since 2016-11-13
  */
-@WebServlet(value = "/user/login")
-public class UserLoginServlet extends HttpServlet {
+@WebServlet(value = {"/users/login", "/users/loginForm"})
+public class UserLoginController extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private static final Logger log = LoggerFactory.getLogger(UserLoginServlet.class);
+    private static final Logger log = LoggerFactory.getLogger(UserLoginController.class);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        RequestDispatcher requestDispatcher = req.getRequestDispatcher("user/login.jsp");
-        requestDispatcher.forward(req, resp);
+        forward("/user/login.jsp", req, resp);
     }
 
     @Override
@@ -36,8 +35,7 @@ public class UserLoginServlet extends HttpServlet {
 
         User user = DataBase.findUserById(userId);
         if (user == null) {
-            RequestDispatcher requestDispatcher = req.getRequestDispatcher("user/login.jsp");
-            requestDispatcher.forward(req, resp);
+            forward("/user/login.jsp", req, resp);
         }
 
         if (user.matchPassword(password)) {
@@ -45,8 +43,13 @@ public class UserLoginServlet extends HttpServlet {
             session.setAttribute("user", user);
             resp.sendRedirect("/");
         } else {
-            RequestDispatcher requestDispatcher = req.getRequestDispatcher("user/login.jsp");
-            requestDispatcher.forward(req, resp);
+            forward("/user/login.jsp", req, resp);
         }
+    }
+
+    private void forward(String forwardUrl, HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        RequestDispatcher rd = req.getRequestDispatcher(forwardUrl);
+        rd.forward(req, resp);
     }
 }
