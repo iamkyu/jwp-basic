@@ -12,7 +12,6 @@ import java.util.List;
 import static core.jdbc.ConnectionManager.getConnection;
 
 public class UserDao {
-
     public void insert(User user) throws SQLException {
         InsertJdbcTemplate insertJdbcTemplate = new InsertJdbcTemplate() {
             @Override
@@ -29,6 +28,24 @@ public class UserDao {
             }
         };
         insertJdbcTemplate.insert(user);
+    }
+
+    public void update(User user) throws SQLException {
+        UpdateJdbcTemplate updateJdbcTemplate = new UpdateJdbcTemplate() {
+            @Override
+            void setValuesForUpdate(User user, PreparedStatement pstmt) throws SQLException {
+                pstmt.setString(1, user.getPassword());
+                pstmt.setString(2, user.getName());
+                pstmt.setString(3, user.getEmail());
+                pstmt.setString(4, user.getUserId());
+            }
+
+            @Override
+            String createQueryForUpdate() {
+                return "UPDATE USERS set password = ?, name = ?, email = ? WHERE userId = ?";
+            }
+        };
+        updateJdbcTemplate.update(user);
     }
 
     public User findByUserId(String userId) throws SQLException {
@@ -89,30 +106,6 @@ public class UserDao {
             if (pstmt != null) {
                 pstmt.close();
             }
-            if (con != null) {
-                con.close();
-            }
-        }
-    }
-
-    public void update(User user) throws SQLException {
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        try {
-            con = getConnection();
-            String sql = "UPDATE USERS set password = ?, name = ?, email = ? WHERE userId = ?";
-            pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, user.getPassword());
-            pstmt.setString(2, user.getName());
-            pstmt.setString(3, user.getEmail());
-            pstmt.setString(4, user.getUserId());
-
-            pstmt.executeUpdate();
-        } finally {
-            if (pstmt != null) {
-                pstmt.close();
-            }
-
             if (con != null) {
                 con.close();
             }
