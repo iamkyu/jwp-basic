@@ -42,7 +42,7 @@ public class UserDao {
 
     public User findByUserId(String userId) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
-        RowMapper rowMapper = new RowMapper() {
+        RowMapper<User> rowMapper = new RowMapper() {
             @Override
             public Object mapRow(ResultSet rs) throws SQLException {
                 return new User(
@@ -60,7 +60,7 @@ public class UserDao {
         };
 
         String sql = "SELECT userId, password, name, email FROM USERS WHERE userid=?";
-        return (User) jdbcTemplate.queryForObject(sql, pss, rowMapper);
+        return jdbcTemplate.queryForObject(sql, pss, rowMapper);
     }
 
     public List<User> findAll() {
