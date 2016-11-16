@@ -21,13 +21,10 @@ public class UserDao {
                 pstmt.setString(3, user.getName());
                 pstmt.setString(4, user.getEmail());
             }
+       };
 
-            @Override
-            String createQuery() {
-                return "INSERT INTO USERS VALUES (?, ?, ?, ?)";
-            }
-        };
-        jdbcTemplate.update();
+        String sql =  "INSERT INTO USERS VALUES (?, ?, ?, ?)";
+        jdbcTemplate.update(sql);
     }
 
     public void update(User user) throws SQLException {
@@ -39,13 +36,10 @@ public class UserDao {
                 pstmt.setString(3, user.getEmail());
                 pstmt.setString(4, user.getUserId());
             }
-
-            @Override
-            String createQuery() {
-                return "UPDATE USERS set password = ?, name = ?, email = ? WHERE userId = ?";
-            }
         };
-        jdbcTemplate.update();
+
+        String sql =  "UPDATE USERS set password = ?, name = ?, email = ? WHERE userId = ?";
+        jdbcTemplate.update(sql);
     }
 
     public User findByUserId(String userId) throws SQLException {
