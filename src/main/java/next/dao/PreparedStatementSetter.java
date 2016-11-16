@@ -8,5 +8,5 @@ import java.sql.SQLException;
  * @since 2016-11-16
  */
 public interface PreparedStatementSetter {
-    void setValues(PreparedStatement pstmt) throws SQLException;
+    void setParameters(PreparedStatement pstmt) throws SQLException;
 }
