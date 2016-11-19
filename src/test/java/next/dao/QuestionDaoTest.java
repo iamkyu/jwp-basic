@@ -106,7 +106,7 @@ public class QuestionDaoTest {
         return new Question(writerForFixture, titleForFixture, contentsForFixture);
     }
 
-    public void deleteAllForTest() {
+    private void deleteAllForTest() {
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
         String sql = "DELETE FROM QUESTIONS";
         jdbcTemplate.update(sql);
