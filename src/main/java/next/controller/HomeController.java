@@ -1,6 +1,7 @@
 package next.controller;
 
 import core.mvc.ModelAndView;
+import next.controller.user.AbstractController;
 import next.dao.QuestionDao;
 
 import javax.servlet.http.HttpServletRequest;

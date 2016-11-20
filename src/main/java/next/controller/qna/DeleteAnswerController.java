@@ -1,7 +1,8 @@
-package next.controller;
+package next.controller.qna;
 
 import core.jdbc.DataAccessException;
 import core.mvc.ModelAndView;
+import next.controller.user.AbstractController;
 import next.dao.AnswerDao;
 import next.model.Result;
 

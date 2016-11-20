@@ -1,7 +1,8 @@
-package next.controller;
+package next.controller.user;
 
 import core.db.DataBase;
 import core.mvc.ModelAndView;
+import next.controller.UserSessionUtils;
 import next.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

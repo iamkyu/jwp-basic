@@ -1,6 +1,7 @@
-package next.controller;
+package next.controller.qna;
 
 import core.mvc.ModelAndView;
+import next.controller.user.AbstractController;
 import next.dao.AnswerDao;
 import next.dao.QuestionDao;
 import next.model.Answer;

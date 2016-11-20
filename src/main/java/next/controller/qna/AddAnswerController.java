@@ -1,7 +1,8 @@
-package next.controller;
+package next.controller.qna;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import core.mvc.ModelAndView;
+import next.controller.user.AbstractController;
 import next.dao.AnswerDao;
 import next.model.Answer;
 import org.slf4j.Logger;
