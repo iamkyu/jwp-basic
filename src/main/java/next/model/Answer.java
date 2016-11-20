@@ -41,6 +41,10 @@ public class Answer {
         return createdDate;
     }
 
+    public long getTimeFromCreateDate() {
+        return this.createdDate.getTime();
+    }
+
     public long getQuestionId() {
         return questionId;
     }

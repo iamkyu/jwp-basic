@@ -10,7 +10,6 @@ import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 /**
@@ -32,19 +31,12 @@ public class AnswerDaoTest {
         AnswerDao dao = new AnswerDao();
 
         //when
-        dao.insert(expected);
+        Answer result = dao.insert(expected);
         List<Answer> answers = dao.findAllByQuestionId(1L);
         assertEquals(answers.size(), 1);
-        Answer result = answers.get(0);
 
         //then
-        assertThat(result.getWriter(), is("tester"));
-        assertThat(result.getContents(), is("my answer"));
-
-        //and then
-        Answer anotherOne = dao.findByAnswerId(result.getAnswerId());
-        assertEquals(result.getAnswerId(), anotherOne.getAnswerId());
-        assertEquals(result.getWriter(), anotherOne.getWriter());
-        assertEquals(result.getContents(), anotherOne.getContents());
+        assertEquals(result.getAnswerId(), answers.get(0).getAnswerId());
+        assertEquals(result.getContents(), answers.get(0).getContents());
     }
 }
