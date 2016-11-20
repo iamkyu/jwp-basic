@@ -1,6 +1,6 @@
 package next.controller;
 
-import core.mvc.Controller;
+import core.mvc.ModelAndView;
 import next.dao.AnswerDao;
 import next.dao.QuestionDao;
 import next.model.Answer;
@@ -14,9 +14,9 @@ import java.util.List;
  * @author Kj Nam
  * @since 2016-11-19
  */
-public class ShowController implements Controller {
+public class ShowController extends AbstractController {
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+    public ModelAndView execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         long questionId = Long.parseLong(req.getParameter("questionId"));
         QuestionDao dao = new QuestionDao();
         Question quesiton = dao.findByQuestionId(questionId);
@@ -26,6 +26,6 @@ public class ShowController implements Controller {
         List<Answer> answers = answerDao.findAllByQuestionId(questionId);
         req.setAttribute("answers", answers);
 
-        return "/qna/show.jsp";
+        return jspView("/qna/show.jsp");
     }
 }

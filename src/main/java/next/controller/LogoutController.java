@@ -1,6 +1,6 @@
 package next.controller;
 
-import core.mvc.Controller;
+import core.mvc.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,11 +10,11 @@ import javax.servlet.http.HttpSession;
  * @author Kj Nam
  * @since 2016-11-13
  */
-public class LogoutController implements Controller {
+public class LogoutController extends AbstractController {
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+    public ModelAndView execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         HttpSession session = req.getSession();
         session.removeAttribute(UserSessionUtils.USER_SESSION_KEY);
-        return "redirect:/";
+        return jspView("redirect:/");
     }
 }
