@@ -1,4 +1,5 @@
 package core.mvc;
+import next.controller.AddAnswerController;
 import next.controller.CreateUserController;
 import next.controller.HomeController;
 import next.controller.ListUserController;
@@ -30,6 +31,7 @@ public class RequestMapping {
         mappings.put("/users/updateForm", new UpdateFormUserController());
         mappings.put("/users/update", new UpdateUserController());
         mappings.put("/qna/show", new ShowController());
+        mappings.put("/api/qna/addAnswer", new AddAnswerController());
 
         logger.info("Initialized Request Mapping!");
     }

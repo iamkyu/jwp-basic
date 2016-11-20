@@ -55,7 +55,6 @@
                     <div class="qna-comment-slipp">
                         <p class="qna-comment-count"><strong>${question.countOfAnswer}</strong>개의 의견</p>
                         <div class="qna-comment-slipp-articles">
-
                             <c:forEach items="${answers}" var="each">
                                 <article class="article">
                                     <div class="article-header">
@@ -135,7 +134,6 @@
         </div>
     </article>
 </script>
-
 <%@ include file="/include/footer.jspf" %>
 </body>
 </html>
