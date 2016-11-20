@@ -1,5 +1,4 @@
 $(".answerWrite input[type=submit]").click(addAnswer);
-
 function addAnswer(e) {
   e.preventDefault();
 

@@ -59,4 +59,10 @@ public class AnswerDao {
                 "ORDER BY answerId DESC";
         return jdbcTemplate.queryForObject(sql, rowMapper, pss);
     }
+
+    public void delete(Long answerId) {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate();
+        String sql = "DELETE FROM ANSWERS WHERE answerId = ?";
+        jdbcTemplate.update(sql, answerId);
+    }
 }
