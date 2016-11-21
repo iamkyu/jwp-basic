@@ -13,8 +13,10 @@ import java.util.List;
  * @since 2016-11-17
  */
 public class QuestionDao {
+
+
     public void insert(Question question) {
-        JdbcTemplate jdbcTemplate = new JdbcTemplate();
+        JdbcTemplate jdbcTemplate = JdbcTemplate.getInstance();
         String sql = "INSERT INTO QUESTIONS (writer, title, contents, createdDate, countOfAnswer) VALUES(?,?,?,?,?)";
 
         jdbcTemplate.update(sql, question.getWriter(), question.getTitle(), question.getContents(),
@@ -22,7 +24,7 @@ public class QuestionDao {
     }
 
     public List<Question> findAll() {
-        JdbcTemplate jdbcTemplate = new JdbcTemplate();
+        JdbcTemplate jdbcTemplate = JdbcTemplate.getInstance();
         RowMapper<Question> rowMapper = rs -> new Question(
                 rs.getLong("questionId"),
                 rs.getString("writer"),
@@ -35,7 +37,7 @@ public class QuestionDao {
     }
 
     public Question findByQuestionId(Long questionId) {
-        JdbcTemplate jdbcTemplate = new JdbcTemplate();
+        JdbcTemplate jdbcTemplate = JdbcTemplate.getInstance();
         RowMapper<Question> rowMapper = rs -> new Question(
                 rs.getLong("questionId"),
                 rs.getString("writer"),
@@ -51,7 +53,7 @@ public class QuestionDao {
     }
 
     public void update(Question question){
-        JdbcTemplate jdbcTemplate = new JdbcTemplate();
+        JdbcTemplate jdbcTemplate = JdbcTemplate.getInstance();
         String sql = "UPDATE QUESTIONS set writer=?, title=?, contents=?, createdDate=?, countOfAnswer=? " +
                 "WHERE questionId=?";
         //FIXME 답변수 매직넘버 제거
@@ -61,7 +63,7 @@ public class QuestionDao {
 
 
     public void delete(Long questionId) {
-        JdbcTemplate jdbcTemplate = new JdbcTemplate();
+        JdbcTemplate jdbcTemplate = JdbcTemplate.getInstance();
         PreparedStatementSetter pss = pstmt -> pstmt.setLong(1, questionId);
 
         String sql = "DELETE FROM QUESTIONS WHERE questionId=?";

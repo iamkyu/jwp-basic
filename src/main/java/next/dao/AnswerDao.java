@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class AnswerDao {
     public Answer insert(Answer answer) {
-        JdbcTemplate jdbcTemplate = new JdbcTemplate();
+        JdbcTemplate jdbcTemplate = JdbcTemplate.getInstance();
         String sql = "INSERT INTO ANSWERS (writer, contents, createdDate, questionId) VALUES (?, ?, ?, ?)";
         PreparedStatementCreator psc = con -> {
             PreparedStatement pstmt = con.prepareStatement(sql);
@@ -34,7 +34,7 @@ public class AnswerDao {
     }
 
     public List<Answer> findAllByQuestionId(Long questionId) {
-        JdbcTemplate jdbcTemplate = new JdbcTemplate();
+        JdbcTemplate jdbcTemplate = JdbcTemplate.getInstance();
         RowMapper<Answer> rowMapper = rs -> new Answer(
                 rs.getLong("answerId"),
                 rs.getString("writer"),
@@ -47,7 +47,7 @@ public class AnswerDao {
     }
 
     public Answer findById(Long answerId) {
-        JdbcTemplate jdbcTemplate = new JdbcTemplate();
+        JdbcTemplate jdbcTemplate = JdbcTemplate.getInstance();
         RowMapper<Answer> rowMapper = rs -> new Answer(
                 rs.getLong("answerId"),
                 rs.getString("writer"),
@@ -61,7 +61,7 @@ public class AnswerDao {
     }
 
     public void delete(Long answerId) {
-        JdbcTemplate jdbcTemplate = new JdbcTemplate();
+        JdbcTemplate jdbcTemplate = JdbcTemplate.getInstance();
         String sql = "DELETE FROM ANSWERS WHERE answerId = ?";
         jdbcTemplate.update(sql, answerId);
     }
