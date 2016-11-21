@@ -1,9 +1,10 @@
 package core.mvc;
 
+import core.nmvc.AnnotationHandlerMapping;
+import core.nmvc.HandlerExecution;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,12 +20,17 @@ import java.io.IOException;
 public class DispatcherServlet extends HttpServlet {
     private static final Logger logger = LoggerFactory.getLogger(DispatcherServlet.class);
     private static final String DEFAULT_REDIRECT_PREFIX = "redirect:";
-    private RequestMapping rm;
+
+    private LegacyHandlerMapping lhm;
+    private AnnotationHandlerMapping ahm;
 
     @Override
     public void init() throws ServletException {
-        rm = new RequestMapping();
-        rm.initMapping();
+        lhm = new LegacyHandlerMapping();
+        lhm.initMapping();
+
+        ahm = new AnnotationHandlerMapping("next.controller");
+        ahm.initialize();
     }
 
     @Override
@@ -32,26 +38,25 @@ public class DispatcherServlet extends HttpServlet {
         String requestUri = req.getRequestURI();
         logger.debug("Method : {}, Request URI : {}", req.getMethod(), requestUri);
 
-        Controller controller = rm.findController(requestUri);
-        ModelAndView mav;
         try {
-            mav = controller.execute(req, resp);
-            View view = mav.getView();
-            view.render(mav.getModel(), req, resp);
+            Controller controller = lhm.findController(requestUri);
+            if (controller != null) {
+                render(req, resp, controller.execute(req, resp));
+            } else {
+                HandlerExecution he = ahm.getHandler(req);
+                if (he == null) {
+                    throw new ServletException("invalid request");
+                }
+                render(req, resp, he.handle(req, resp));
+            }
         } catch (Exception e) {
             logger.error("Exception : {}", e);
             throw new ServletException(e.getMessage());
         }
     }
 
-    private void move(String viewName, HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-        if (viewName.startsWith(DEFAULT_REDIRECT_PREFIX)) {
-            resp.sendRedirect(viewName.substring(DEFAULT_REDIRECT_PREFIX.length()));
-            return;
-        }
-
-        RequestDispatcher rd = req.getRequestDispatcher(viewName);
-        rd.forward(req, resp);
+    private void render(HttpServletRequest req, HttpServletResponse resp, ModelAndView mav) throws Exception {
+        View view = mav.getView();
+        view.render(mav.getModel(), req, resp);
     }
 }
