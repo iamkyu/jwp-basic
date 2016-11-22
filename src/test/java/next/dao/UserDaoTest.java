@@ -13,9 +13,11 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class UserDaoTest {
+    private UserDao userDao;
 
     @Before
     public void setup() {
+        userDao = UserDao.getInstance();
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
         populator.addScript(new ClassPathResource("jwp.sql"));
         DatabasePopulatorUtils.execute(populator, ConnectionManager.getDataSource());
@@ -24,7 +26,6 @@ public class UserDaoTest {
     @Test
     public void crud() throws Exception {
         User expected = new User("userId", "password", "name", "javajigi@email.com");
-        UserDao userDao = new UserDao();
         userDao.insert(expected);
         User actual = userDao.findByUserId(expected.getUserId());
         assertEquals(expected, actual);
@@ -37,7 +38,6 @@ public class UserDaoTest {
 
     @Test
     public void findAll() throws Exception {
-        UserDao userDao = new UserDao();
         List<User> users = userDao.findAll();
         assertEquals(1, users.size());
     }

@@ -1,4 +1,5 @@
 package core.mvc;
+import core.nmvc.HandlerMapping;
 import next.controller.qna.AddAnswerController;
 import next.controller.user.CreateUserController;
 import next.controller.qna.DeleteAnswerController;
@@ -13,10 +14,11 @@ import next.controller.user.UpdateUserController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LegacyHandlerMapping {
+public class LegacyHandlerMapping implements HandlerMapping {
     private static final Logger logger = LoggerFactory.getLogger(DispatcherServlet.class);
     private Map<String, Controller> mappings = new HashMap<>();
 
@@ -44,5 +46,10 @@ public class LegacyHandlerMapping {
 
     void put(String url, Controller controller) {
         mappings.put(url, controller);
+    }
+
+    @Override
+    public Object getHandler(HttpServletRequest request) {
+        return mappings.get(request.getRequestURI());
     }
 }

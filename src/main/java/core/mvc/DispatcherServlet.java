@@ -1,7 +1,9 @@
 package core.mvc;
 
+import com.google.common.collect.Lists;
 import core.nmvc.AnnotationHandlerMapping;
 import core.nmvc.HandlerExecution;
+import core.nmvc.HandlerMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author Kj Nam
@@ -21,42 +24,52 @@ public class DispatcherServlet extends HttpServlet {
     private static final Logger logger = LoggerFactory.getLogger(DispatcherServlet.class);
     private static final String DEFAULT_REDIRECT_PREFIX = "redirect:";
 
-    private LegacyHandlerMapping lhm;
-    private AnnotationHandlerMapping ahm;
+    private List<HandlerMapping> mappings = Lists.newArrayList();
 
     @Override
     public void init() throws ServletException {
-        lhm = new LegacyHandlerMapping();
+        LegacyHandlerMapping lhm = new LegacyHandlerMapping();
         lhm.initMapping();
 
-        ahm = new AnnotationHandlerMapping("next.controller");
+        AnnotationHandlerMapping ahm = new AnnotationHandlerMapping("next.controller");
         ahm.initialize();
+
+        mappings.add(lhm);
+        mappings.add(ahm);
     }
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String requestUri = req.getRequestURI();
-        logger.debug("Method : {}, Request URI : {}", req.getMethod(), requestUri);
-
+        Object handler = getHandler(req);
+        if (handler == null) {
+            throw new ServletException("invalid request");
+        }
         try {
-            Controller controller = lhm.findController(requestUri);
-            if (controller != null) {
-                render(req, resp, controller.execute(req, resp));
-            } else {
-                HandlerExecution he = ahm.getHandler(req);
-                if (he == null) {
-                    throw new ServletException("invalid request");
-                }
-                render(req, resp, he.handle(req, resp));
-            }
-        } catch (Exception e) {
-            logger.error("Exception : {}", e);
+            ModelAndView mav = excute(handler, req, resp);
+            View view = mav.getView();
+            view.render(mav.getModel(), req, resp);
+        } catch (Throwable e) {
+            logger.error("Excpetion: {}", e);
             throw new ServletException(e.getMessage());
         }
     }
 
-    private void render(HttpServletRequest req, HttpServletResponse resp, ModelAndView mav) throws Exception {
-        View view = mav.getView();
-        view.render(mav.getModel(), req, resp);
+    private Object getHandler(HttpServletRequest req) {
+        for (HandlerMapping handlerMapping : mappings) {
+            Object handler = handlerMapping.getHandler(req);
+            if (handler != null) {
+                return handler;
+            }
+        }
+        return null;
+    }
+
+    private ModelAndView excute(Object handler, HttpServletRequest req, HttpServletResponse resp)
+            throws Exception {
+        if (handler instanceof Controller) {
+            return ((Controller) handler).execute(req, resp);
+        } else {
+            return ((HandlerExecution)handler).handle(req, resp);
+        }
     }
 }

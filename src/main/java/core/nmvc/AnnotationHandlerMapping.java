@@ -17,7 +17,7 @@ import java.util.Set;
  * @author Kj Nam
  * @since 2016-11-21
  */
-public class AnnotationHandlerMapping {
+public class AnnotationHandlerMapping implements HandlerMapping {
     private static final Logger logger =
             LoggerFactory.getLogger(AnnotationHandlerMapping.class);
 
@@ -55,6 +55,7 @@ public class AnnotationHandlerMapping {
         return requestMappingMethods;
     }
 
+    @Override
     public HandlerExecution getHandler(HttpServletRequest request) {
         String requestUri = request.getRequestURI();
         RequestMethod rm = RequestMethod.valueOf(request.getMethod().toUpperCase());
