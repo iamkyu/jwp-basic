@@ -1,4 +1,4 @@
-package core.mvc;
+package next.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,30 +13,29 @@ import java.io.IOException;
 
 /**
  * @author Kj Nam
- * @since 2016-11-13
+ * @since 2017-04-17
  */
 @WebServlet(name = "dispatcher", urlPatterns = "/", loadOnStartup = 1)
 public class DispatcherServlet extends HttpServlet {
     private static final Logger logger = LoggerFactory.getLogger(DispatcherServlet.class);
     private static final String DEFAULT_REDIRECT_PREFIX = "redirect:";
-    private RequestMapping rm;
+
+    private RequestMapping requestMapping = new RequestMapping();
 
     @Override
     public void init() throws ServletException {
-        rm = new RequestMapping();
-        rm.initMapping();
     }
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String requestUri = req.getRequestURI();
-        logger.debug("Method : {}, Request URI : {}", req.getMethod(), requestUri);
+        logger.debug("Method: {}, RequestURI: {}", req.getMethod(), req.getRequestURI());
+        Controller controller = requestMapping.get(requestUri);
 
-        Controller controller = rm.findController(requestUri);
         try {
-            String viewName = controller.execute(req, resp);
-            move(viewName, req, resp);
-        } catch (Exception e) {
+            String path = controller.execute(req, resp);
+            move(path, req, resp);
+        } catch (Throwable e) {
             logger.error("Exception : {}", e);
             throw new ServletException(e.getMessage());
         }

@@ -1,19 +1,19 @@
 package next.dao;
 
-import core.jdbc.ConnectionManager;
-import next.model.User;
+import static org.junit.Assert.assertEquals;
+
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
-import java.util.List;
-
-import static org.junit.Assert.*;
+import core.jdbc.ConnectionManager;
+import next.model.User;
 
 public class UserDaoTest {
-
     @Before
     public void setup() {
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();

@@ -8,10 +8,8 @@ import java.util.Map;
 
 public class DataBase {
     private static Map<String, User> users = Maps.newHashMap();
-
     static {
-        User admin = new User("admin", "admin", "운영자", "admin@mail.com");
-        addUser(admin);
+        users.put("admin", new User("admin", "admin", "iamkyu", "a@b.com"));
     }
 
     public static void addUser(User user) {

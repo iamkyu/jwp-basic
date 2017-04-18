@@ -4,10 +4,6 @@ import next.model.User;
 
 import javax.servlet.http.HttpSession;
 
-/**
- * @author Kj Nam
- * @since 2016-11-13
- */
 public class UserSessionUtils {
     public static final String USER_SESSION_KEY = "user";
 
