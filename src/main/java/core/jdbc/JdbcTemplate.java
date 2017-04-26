@@ -15,11 +15,11 @@ import java.util.List;
  */
 public abstract class JdbcTemplate {
 
-    public void insert() throws SQLException {
+    public void insert(PreparedStatementSetter pss) throws SQLException {
         try(Connection con = ConnectionManager.getConnection();
             PreparedStatement pstmt = con.prepareCall(getQuery())) {
 
-            setValues(pstmt);
+            pss.setValues(pstmt);
             pstmt.executeUpdate();
         }
     }
@@ -28,7 +28,18 @@ public abstract class JdbcTemplate {
         try(Connection con = ConnectionManager.getConnection();
             PreparedStatement pstmt = con.prepareCall(getQuery())) {
 
-            setValues(pstmt);
+            ResultSet rs = pstmt.executeQuery();
+            List<User> users = getUsers(rs);
+
+            return users;
+        }
+    }
+
+    public List<User> query(PreparedStatementSetter pss) throws SQLException {
+        try(Connection con = ConnectionManager.getConnection();
+            PreparedStatement pstmt = con.prepareCall(getQuery())) {
+
+            pss.setValues(pstmt);
 
             ResultSet rs = pstmt.executeQuery();
             List<User> users = getUsers(rs);
@@ -37,8 +48,8 @@ public abstract class JdbcTemplate {
         }
     }
 
-    public User queryForObject() throws SQLException {
-        return query().get(0);
+    public User queryForObject(PreparedStatementSetter pss) throws SQLException {
+        return query(pss).get(0);
     }
 
     private List<User> getUsers(ResultSet rs) throws SQLException {
@@ -50,8 +61,6 @@ public abstract class JdbcTemplate {
         }
         return users;
     }
-
-    public abstract void setValues(PreparedStatement pstmt) throws SQLException;
 
     public abstract String getQuery();
 }
