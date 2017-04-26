@@ -1,17 +1,18 @@
 package next.dao;
 
+import core.jdbc.JdbcTemplate;
+import core.jdbc.KeyHolder;
+import core.jdbc.PreparedStatementCreator;
+import core.jdbc.PreparedStatementSetter;
+import core.jdbc.RowMapper;
+import next.model.Question;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
-
-import core.jdbc.JdbcTemplate;
-import core.jdbc.KeyHolder;
-import core.jdbc.PreparedStatementCreator;
-import core.jdbc.RowMapper;
-import next.model.Question;
 
 public class QuestionDao {
     public Question insert(Question question) {
@@ -34,6 +35,19 @@ public class QuestionDao {
         KeyHolder keyHolder = new KeyHolder();
         jdbcTemplate.update(psc, keyHolder);
         return findById(keyHolder.getId());
+    }
+
+    public void updateAnswerCount(Long questionId) {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate();
+        String sql = "UPDATE QUESTIONS SET countOfAnswer = (countOfAnswer+1) WHERE questionId = ?";
+        PreparedStatementSetter pss = new PreparedStatementSetter() {
+            @Override
+            public void setParameters(PreparedStatement pstmt) throws SQLException {
+                pstmt.setLong(1, questionId);
+            }
+        };
+
+        jdbcTemplate.update(sql, pss);
     }
     
     public List<Question> findAll() {
