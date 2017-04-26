@@ -1,7 +1,6 @@
 package next.dao;
 
-import core.jdbc.InsertJdbcTemplate;
-import core.jdbc.SelectJdbcTemplate;
+import core.jdbc.JdbcTemplate;
 import next.model.User;
 
 import java.sql.PreparedStatement;
@@ -10,9 +9,9 @@ import java.util.List;
 
 public class UserDao {
     public void insert(User user) throws SQLException {
-        InsertJdbcTemplate template = new InsertJdbcTemplate() {
+        JdbcTemplate template = new JdbcTemplate() {
             @Override
-            public void setPreparedStatement(PreparedStatement pstmt) throws SQLException {
+            public void setValues(PreparedStatement pstmt) throws SQLException {
                 pstmt.setString(1, user.getUserId());
                 pstmt.setString(2, user.getPassword());
                 pstmt.setString(3, user.getName());
@@ -29,9 +28,9 @@ public class UserDao {
     }
 
     public void update(User user) throws SQLException {
-        InsertJdbcTemplate template = new InsertJdbcTemplate() {
+        JdbcTemplate template = new JdbcTemplate() {
             @Override
-            public void setPreparedStatement(PreparedStatement pstmt) throws SQLException {
+            public void setValues(PreparedStatement pstmt) throws SQLException {
                 pstmt.setString(1, user.getPassword());
                 pstmt.setString(2, user.getName());
                 pstmt.setString(3, user.getEmail());
@@ -48,9 +47,9 @@ public class UserDao {
     }
 
     public List<User> findAll() throws SQLException {
-        SelectJdbcTemplate template = new SelectJdbcTemplate() {
+        JdbcTemplate template = new JdbcTemplate() {
             @Override
-            public void setPreparedStatement(PreparedStatement pstmt) throws SQLException {
+            public void setValues(PreparedStatement pstmt) throws SQLException {
             }
 
             @Override
@@ -63,9 +62,9 @@ public class UserDao {
     }
 
     public User findByUserId(String userId) throws SQLException {
-        SelectJdbcTemplate template = new SelectJdbcTemplate() {
+        JdbcTemplate template = new JdbcTemplate() {
             @Override
-            public void setPreparedStatement(PreparedStatement pstmt) throws SQLException {
+            public void setValues(PreparedStatement pstmt) throws SQLException {
                 pstmt.setString(1, userId);
             }
 

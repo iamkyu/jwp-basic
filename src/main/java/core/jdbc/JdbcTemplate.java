@@ -13,16 +13,22 @@ import java.util.List;
  * @author Kj Nam
  * @since 2017-04-26
  */
-public abstract class SelectJdbcTemplate {
-    public abstract void setPreparedStatement(PreparedStatement pstmt) throws SQLException;
+public abstract class JdbcTemplate {
 
-    public abstract String getQuery();
+    public void insert() throws SQLException {
+        try(Connection con = ConnectionManager.getConnection();
+            PreparedStatement pstmt = con.prepareCall(getQuery())) {
+
+            setValues(pstmt);
+            pstmt.executeUpdate();
+        }
+    }
 
     public List<User> query() throws SQLException {
         try(Connection con = ConnectionManager.getConnection();
             PreparedStatement pstmt = con.prepareCall(getQuery())) {
 
-            setPreparedStatement(pstmt);
+            setValues(pstmt);
 
             ResultSet rs = pstmt.executeQuery();
             List<User> users = getUsers(rs);
@@ -44,4 +50,8 @@ public abstract class SelectJdbcTemplate {
         }
         return users;
     }
+
+    public abstract void setValues(PreparedStatement pstmt) throws SQLException;
+
+    public abstract String getQuery();
 }
