@@ -6,21 +6,14 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
-import next.model.Question;
-import next.model.User;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 public class ReflectionTest {
     private static final Logger logger = LoggerFactory.getLogger(ReflectionTest.class);
@@ -42,9 +35,18 @@ public class ReflectionTest {
     }
     
     @Test
-    public void newInstanceWithConstructorArgs() {
+    public void newInstanceWithConstructorArgs() throws IllegalAccessException, InvocationTargetException, InstantiationException {
         Class<User> clazz = User.class;
         logger.debug(clazz.getName());
+
+        Constructor[] constructors = clazz.getDeclaredConstructors();
+        Constructor c = constructors[0];
+        User user = (User) c.newInstance("myid", "mypass", "myname", "myemail");
+
+        assertThat(user.getUserId(), is("myid"));
+        assertThat(user.getPassword(), is("mypass"));
+        assertThat(user.getName(), is("myname"));
+        assertThat(user.getEmail(), is("myemail"));
     }
     
     @Test
@@ -58,7 +60,7 @@ public class ReflectionTest {
         age.setAccessible(true);
         age.set(student, 8);
 
-        Assert.assertThat(student.getName(), is("myname"));
-        Assert.assertThat(student.getAge(), is(8));
+        assertThat(student.getName(), is("myname"));
+        assertThat(student.getAge(), is(8));
     }
 }
