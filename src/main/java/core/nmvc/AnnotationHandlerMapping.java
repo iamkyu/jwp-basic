@@ -13,7 +13,7 @@ import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Set;
 
-public class AnnotationHandlerMapping {
+public class AnnotationHandlerMapping implements HandlerMapping {
     private static final Logger logger = LoggerFactory.getLogger(AnnotationHandlerMapping.class);
 
     private Object[] basePackage;
@@ -49,7 +49,8 @@ public class AnnotationHandlerMapping {
         return requestMappingMethods;
     }
 
-    public HandlerExecution getHandler(HttpServletRequest request) {
+    @Override
+    public Object getHandler(HttpServletRequest request) {
         String requestUri = request.getRequestURI();
         RequestMethod rm = RequestMethod.valueOf(request.getMethod().toUpperCase());
         return handlerExecutions.get(new HandlerKey(requestUri, rm));

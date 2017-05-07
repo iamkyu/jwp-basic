@@ -1,11 +1,6 @@
 package core.mvc;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import core.nmvc.HandlerMapping;
 import next.controller.HomeController;
 import next.controller.qna.AddAnswerController;
 import next.controller.qna.ApiDeleteQuestionController;
@@ -24,8 +19,14 @@ import next.controller.user.LogoutController;
 import next.controller.user.ProfileController;
 import next.controller.user.UpdateFormUserController;
 import next.controller.user.UpdateUserController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class RequestMapping {
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
+
+public class RequestMapping implements HandlerMapping {
     private static final Logger logger = LoggerFactory.getLogger(DispatcherServlet.class);
     private Map<String, Controller> mappings = new HashMap<>();
 
@@ -60,5 +61,10 @@ public class RequestMapping {
 
     void put(String url, Controller controller) {
         mappings.put(url, controller);
+    }
+
+    @Override
+    public Object getHandler(HttpServletRequest request) {
+        return mappings.get(request.getRequestURI());
     }
 }
